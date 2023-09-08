@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<!-- Name: Laurence Goh Ming Shen
+Class : DIT/FT/1B/03
+Admin num : 2220327 -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Actor</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/actor.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-5">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" id="home">SP DVD Page</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="me-auto"></div>
+
+          <ul class="navbar-nav mb-2 mb-md-0 mx-5">
+            <li class="nav-item"><a class="nav-link active fs-5 mx-3"
+              aria-current="page"
+              id="admin"
+              href="#"
+              >Admin
+              </a><li>
+            <li class="nav-item">
+              <a
+                class="nav-link active fs-5"
+                aria-current="page"
+                id="logout"
+                href="#"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container justify-content-center">
+      <main>
+        <div class="row g-5 mt-5 rounded-4">
+          <div class="col-md-7 col-lg-12">
+            <h2 class="mb-5 text-center">Add Actor</h2>
+            <form>
+              <div class="row g-3 justify-content-center px-5">
+                
+                <div class="col-sm-12 justify-content-center d-flex">
+                  <div class="col-4">
+                    <label for="firstName" class="form-label">First name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="firstName"
+                    placeholder="John"
+                    required
+                  />
+                  </div>
+                  
+                </div>
+                <div class="col-sm-12 justify-content-center d-flex">
+                  <div class="col-sm-4">
+                    <label for="lastName" class="form-label">Last name</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="lastName"
+                      placeholder="Smith"
+                      required
+                    />
+                  </div>
+                </div>
+                
+
+                <div class="col-sm-12 justify-content-center d-flex">
+                  <div class="col-sm-4">
+                    <label for="lastName" class="form-label">Actor ID</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="actorid"
+                      placeholder="ID of actor (If updating /removing actor)"
+                    />
+                  </div>
+                </div>
+                
+
+
+                <div class="row justify-content-center my-5">
+                  <div class="col-sm-3">
+                    <a class="w-100 btn btn-primary btn-lg col-6" id="addActor">
+                      Add actor
+                    </a>
+                  </div>
+                  <div class="col-sm-3">
+                    <a class="w-100 btn btn-primary btn-lg col-6" id="updateActor">
+                      Update
+                    </a>
+                  </div>
+                  <div class="col-sm-3">
+                    <a class="w-100 btn btn-primary btn-lg col-6" id="removeActor">
+                      Remove
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const baseUrl = "http://localhost:8081";
+      const token = localStorage.getItem("token");
+      const adminData = localStorage.getItem("userInfo")
+      console.log(token);
+      if (token == null || adminData == "undefined") {
+        alert("Restricted for admins only.");
+        window.location.assign("http://localhost:3001/login.html");
+      }
+
+      $(document).ready(() => {
+        $("#home").click(() => {
+          window.location.assign("http://localhost:3001/main.html");
+        });
+      });
+
+      $(document).ready(() => {
+        $("#admin").click(() => {
+          window.location.assign("http://localhost:3001/admin.html");
+        });
+      });
+
+      $(document).ready(function () {
+        $("#logout").click(function () {
+          localStorage.clear();
+          alert("Successfully logged out. Returning to main page.");
+          window.location.assign("http://localhost:3001/main.html");
+        });
+      });
+
+      $(document).ready(() => {
+        $("#addActor").click(() => {
+          var first_name = document.getElementById("firstName").value;
+          var last_name = document.getElementById("lastName").value;
+
+          
+          const baseUrl = "http://localhost:8081";
+          const url = window.location.toString();
+          const userID = parseInt(url.split("/").slice(-1)[0]);
+
+          if (first_name != "" && last_name != "") {
+            axios
+              .post(`${baseUrl}/actors`, { first_name, last_name },{ headers: { Authorization: "Bearer " + localStorage.getItem("token") } })
+              .then((response) => {
+                console.log(response);
+                var actorID = response.data;
+                alert(
+                  `Successfully added new actor with ID of ${actorID.actor_id}.`
+                );
+              }).catch((e) => {
+              console.log(e)
+            });
+          }  else {
+            alert("Please enter first name and last name.")
+          }
+        });
+      });
+
+      // Update actor details
+      $(document).ready(() => {
+        $('#updateActor').click(() => {
+          var first_name = document.getElementById("firstName").value;
+          var last_name = document.getElementById("lastName").value;
+          var actorid = document.getElementById("actorid").value;
+
+          const baseUrl = "http://localhost:8081";
+          const url = window.location.toString();
+          const userID = parseInt(url.split("/").slice(-1)[0]);
+
+          if (actorid==""){
+            alert("Please enter an actor ID.");
+          }
+          else {
+            if (first_name != "" && last_name != "") {
+            axios.put(`${baseUrl}/actors/${actorid}`,{first_name,last_name},{ headers: { Authorization: "Bearer " + localStorage.getItem("token") } }).then((response) => {
+              console.log(response)
+              if (response.data==''){
+                alert(`No actor with ID ${actorid} can be found.`)
+              }
+              else {
+                alert("Successfully updated!")
+              }
+            }).catch((e) => {
+              console.log(e)
+            })
+          }
+          else if (first_name != "" && last_name == "") {
+            axios.put(`${baseUrl}/actors/${actorid}`,{first_name}).then((response) => {
+              console.log(response)
+              if (response.data==''){
+                alert(`No actor with ID ${actorid} can be found.`)
+              }
+              else {
+                alert("Successfully updated!")
+              }
+            }).catch((e) => {
+              console.log(e)
+            })
+          }
+          else if (first_name == "" && last_name != "") {
+            axios.put(`${baseUrl}/actors/${actorid}`,{last_name}).then((response) => {
+              console.log(response)
+              if (response.data==''){
+                alert(`No actor with ID ${actorid} can be found.`)
+              }
+              else {
+                alert("Successfully updated!")
+              }
+            }).catch((e) => {
+              console.log(e)
+            })
+          }
+          }
+          
+          
+        })
+      })
+
+      // delete actor from database
+      $(document).ready(() => {
+         $('#removeActor').click(() => {
+         
+          var actorid = document.getElementById("actorid").value;
+
+          const baseUrl = "http://localhost:8081";
+          const url = window.location.toString();
+          const userID = parseInt(url.split("/").slice(-1)[0]);
+
+          if (actorid==""){
+            alert("Please enter an actor ID.");
+          } else {
+            axios.delete(`${baseUrl}/actors/${actorid}`,{ headers: { Authorization: "Bearer " + localStorage.getItem("token") } }).then((resp) => {
+              console.log(resp);
+              if(resp.data==''){
+                alert(`No actor with ID ${actorid} can be found.`)
+              }else {
+                alert(`Successfully deleted actor of actor ID ${actorid} from database.`);
+              }
+             
+            }).catch((e) => {
+              console.log(e)
+            })
+          }
+         })
+      } )
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </body>
+</html>

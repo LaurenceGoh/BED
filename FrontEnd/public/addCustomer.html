@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<!-- 
+  Name: Laurence Goh Ming Shen
+  Class : DIT/FT/1B/03
+  Admin no : 2220327
+ -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Customer</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/customer.css">
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-5">
+      <div class="container-fluid">
+        <a class="navbar-brand" id="home" href="#">SP DVD Page</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="me-auto"></div>
+
+          <ul class="navbar-nav mb-2 mb-md-0 mx-5">
+            <li class="nav-item">
+              <a
+                class="nav-link active fs-5 mx-3"
+                aria-current="page"
+                id="admin"
+                href="#"
+                >Admin
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active fs-5"
+                aria-current="page"
+                id="logout"
+                href="#"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container my-5 customer">
+      <div class="py-5 text-center">
+        <h2>Add Customer</h2>
+      </div>
+
+      <div class="col-md-7 col-lg-8 mx-auto">
+        <h4 class="mb-3">Customer details</h4>
+
+        <form class="row g-3">
+          <div class="col-md-6">
+            <label for="firstName" class="form-label"
+              >First name</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              placeholder="John"
+              value=""
+              required
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label for="lastName" class="form-label"
+              >Last name</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="lastName"
+              placeholder="Smith"
+              value=""
+              required
+            />
+          </div>
+
+          <div class="col-md-12">
+            <label for="email" class="form-label"
+              >Email</label
+            >
+            <div class="input-group">
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="abc@gmail.com"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <label for="address1" class="form-label"
+              >Address 1</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="address1"
+              placeholder="Address 1"
+              required
+            />
+          </div>
+
+          <div class="col-md-12">
+            <label for="address2" class="form-label"
+              >Address 2 (Optional)</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="address2"
+              placeholder="Address 2"
+            />
+          </div>
+
+          <div class="col-md-5">
+            <label for="district" class="form-label"
+              >District<span class="text-muted"></span
+            ></label>
+            <input
+              type="text"
+              class="form-control"
+              id="district"
+              placeholder="District"
+              value=""
+              required
+            />
+          </div>
+
+          <div class="col-md-4">
+            <label for="cityid" class="form-label">City ID </label>
+            <input
+              type="number"
+              class="form-control"
+              id="cityid"
+              placeholder="City ID (max 600)"
+              min="1"
+              max="600"
+              value=""
+              required
+            />
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label" for="postal">Postal code</label>
+            <input
+              type="number"
+              class="form-control"
+              id="postal"
+              placeholder=""
+              required
+            />
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="col-md-4">
+            <label class="form-label" for="phone">Phone Number</label>
+            <input
+              type="tel"
+              class="form-control"
+              id="phone"
+              placeholder=""
+              required
+            />
+          </div>
+
+          <div class="col-md-4">
+            <label for="store" class="form-label" 
+              >Select store ID to store</label
+            >
+            <select class="form-select" id="store" required>
+              <option selected disabled>Select  </option>
+              <option>1</option>
+              <option>2</option>
+            </select>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label" for="customerid">Customer ID (For updating)</label>
+            <input
+              type="number"
+              class="form-control"
+              id="customerid"
+              placeholder="(Optional)"
+            />
+          </div>
+
+          <div class="col-md-6 d-flex justify-content-center">
+            <a
+              class="btn btn-danger my-5 px-3 py-2 fs-5"
+              type="submit"
+              id="submit"
+            >
+              Submit new customer details to database
+          </a>
+          </div>
+
+          <div class="col-md-6 d-flex justify-content-center">
+            <a
+              class="btn btn-dark my-5 px-3 py-2 fs-5"
+              type="submit"
+              id="update"
+            >
+              Update customer details to database
+          </a>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      const baseUrl = "http://localhost:8081";
+      const url = window.location.toString();
+      const userID = parseInt(url.split("/").slice(-1)[0]);
+      const token = localStorage.getItem("token");
+      const adminData = localStorage.getItem("userInfo")
+      console.log(token);
+      console.log(adminData)
+      if (token == null && adminData == "undefined") {
+        alert("Restricted for admins only.");
+        window.location.assign("http://localhost:3001/login.html");
+      }
+
+      $(document).ready(() => {
+        $("#admin").click(() => {
+          window.location.assign("http://localhost:3001/admin.html");
+        });
+      });
+
+      $(document).ready(() => {
+        $('#home').click(() => {
+          alert('clicked on home')
+          window.location.assign("http://localhost:3001/main.html");
+        });
+      });
+      
+      $(document).ready(function () {
+        $("#logout").click(function () {
+          localStorage.clear();
+          alert("Successfully logged out. Returning to main page.");
+          window.location.assign("http://localhost:3001/main.html");
+        });
+      });
+
+      $(document).ready(() => {
+        $("#submit").click(() => {
+            const first_name = $("#firstName").val();
+            const last_name = $("#lastName").val();
+            const email = $("#email").val();
+            const address_line1 = $("#address1").val();
+            const address_line2 = $("#address2").val();
+            const district = $("#district").val();
+            const city_id = $("#cityid").val();
+            const postal_code = $("#postal").val();
+            const phone = $("#phone").val();
+            const store_id = $("#store").val();
+            
+            const object = {store_id,first_name,last_name,email,address:{address_line1,address_line2,district,city_id,postal_code,phone}}
+        
+            if (city_id>600){
+              alert("Please enter a city id of less than 600.")
+            }
+            else if (store_id==null) {
+              alert("Please fill in all inputs.")
+            } 
+            else {
+              axios.post(`${baseUrl}/customers`,object,{ headers: { Authorization: "Bearer " + localStorage.getItem("token") } }).then((response) => {
+                console.log(response)
+                
+                alert(`Successfully added customer into database with customer ID of ${response.data.customer_id}.`);
+            }).catch((e) => {
+                console.log(e)
+                if(e.code == "ERR_BAD_REQUEST"){
+                  alert("Email already exists in database.")
+                }
+            })
+            }
+            
+
+        });
+      });
+
+      $(document).ready(() => {
+        $('#update').click(() => {
+          const first_name = $("#firstName").val();
+            const last_name = $("#lastName").val();
+            const email = $("#email").val();
+            const address_line1 = $("#address1").val();
+            const address_line2 = $("#address2").val();
+            const district = $("#district").val();
+            const city_id = $("#cityid").val();
+            const postal_code = $("#postal").val();
+            const phone = $("#phone").val();
+            const store_id = $("#store").val();
+            const customer_id = $("#customerid").val();
+            console.log(city_id)
+            const object = {store_id,first_name,last_name,email,address:{address_line1,address_line2,district,city_id,postal_code,phone}}
+            console.log(object)
+            console.log(customer_id)
+            if (city_id>600){
+              alert("Please enter a city ID of less than 600.")
+            }
+            else if (store_id==null) {
+              alert("Please fill in all inputs.")
+            }
+            else if (customer_id ==''){
+              alert('Please enter a valid customer ID to update.');
+            }
+              else {
+              axios.put(`${baseUrl}/customer/${customer_id}`,object,{ headers: { Authorization: "Bearer " + localStorage.getItem("token") } }).then((response) => {
+                console.log(response)
+                console.log(response.data)
+                alert('Successfully updated customer into database.');
+            }).catch((e) => {
+                console.log(e)
+            })
+            }
+        } )
+      })
+    </script>
+  </body>
+</html>

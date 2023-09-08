@@ -1,0 +1,32 @@
+@charset "utf-8";
+
+/* Name: Laurence Goh Ming Shen
+Class : DIT/FT/1B/03
+Admin num : 2220327 */
+.details {
+    background-color: rgb(206, 63, 144);
+    border-radius: 25px;
+    outline-style: solid;
+}
+
+body {
+   
+    height: 100%;
+    
+    background-image: linear-gradient(
+          -45deg, 
+          rgba(59,173,227,1) 0%, 
+          rgba(87,111,230,1) 25%, 
+          rgba(152,68,183,1) 51%, 
+          rgba(255,53,127,1) 100%
+    );  
+    animation: AnimateBG 5s ease infinite;
+  }
+  
+  @keyframes AnimateBG { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+ 

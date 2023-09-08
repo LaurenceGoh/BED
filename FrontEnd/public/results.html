@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<!-- 
+  Name: Laurence Goh Ming Shen
+Class : DIT/FT/1B/03
+Admin num : 2220327
+ -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DVD Details</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/results.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#" id="home">SP DVD Page</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="me-auto"></div>
+
+          <ul class="navbar-nav mb-2 mb-md-0 mx-5">
+            
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <section class="py-5 text-center container">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="display-5 fw-bold">Search results</h1>
+        </div>
+      </div>
+    </section>
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div
+          class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 d-flex align-items-center"
+          id="film"
+        ></div>
+      </div>
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+      <div class="container">
+        <span class="text-muted">© 2023 Company, Inc</span>
+      </div>
+    </footer>
+    <script>
+      const baseUrl = "http://localhost:8081";
+      const url = window.location.toString();
+      const userID = parseInt(url.split("/").slice(-1)[0]);
+
+      const filmInput = localStorage.getItem("filmInput");
+      const categoryInput = localStorage.getItem("categoryInput");
+      const priceInput = parseFloat(localStorage.getItem("priceInput"));
+      console.log('film: ' + filmInput);
+      console.log('category: ' +categoryInput);
+      console.log('maxprice: ' +priceInput);
+
+      if (!isNaN(priceInput)) {
+        // user has put in film, category
+        if (filmInput !='' && categoryInput !='Category') {
+          console.log("film price and category inputs")
+          axios
+              .get(`${baseUrl}/films/${filmInput}/category/${categoryInput}/maxprice/${priceInput}`)
+              .then((response) => {
+                const films = response.data;
+                console.log(films);
+                console.log(films.length);
+
+                films.forEach((film) => {
+                  const postHtml = `
+                      <div class="col">
+                    <div class="card shadow-sm">
+                      <img src="./images/movie.jpg" alt="" class="bd-placeholder-img card-img-top" width="100%" height="225"">
+                      
+                      <h4 class="card-header">${film.title}</h4>
+
+                      <div class="card-body">
+                        <p class="card-text">${film.description}</p>
+
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-md btn-outline-secondary my-3" id="${film.film_id}">View Details</button>
+                          </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <small class="text-muted">Category : ${film.name}</small>
+                          <small class="text-muted">Rental rate : ${film.rental_rate}</small>
+                          <small class="text-muted">Release year : ${film.release_year}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  `;
+                  $("#film").append(postHtml);
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+        }
+        // film only
+        else if (filmInput != '' && categoryInput == 'Category'){
+          console.log("film price inputs")
+          console.log(`${baseUrl}/flims/${filmInput}/maxprice/${priceInput}`)
+          axios
+              .get(`${baseUrl}/flims/${filmInput}/maxprice/${priceInput}`)
+              .then((response) => {
+                const films = response.data;
+                console.log(films);
+                console.log(films.length);
+
+                films.forEach((film) => {
+                  const postHtml = `
+                      <div class="col">
+                    <div class="card shadow-sm">
+                      <img src="./images/movie.jpg" alt="" class="bd-placeholder-img card-img-top" width="100%" height="225"">
+                      <h4 class="card-header">${film.title}</h4>
+
+                      <div class="card-body">
+                        <p class="card-text">${film.description}</p>
+
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-md btn-outline-secondary my-3" id="${film.film_id}">View Details</button>
+                          </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <small class="text-muted">Category : ${film.name}</small>
+                          <small class="text-muted">Rental rate : ${film.rental_rate}</small>
+                          <small class="text-muted">Release year : ${film.release_year}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  `;
+                  $("#film").append(postHtml);
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+        }
+        // category only
+        else if (filmInput == '' && categoryInput != 'Category'){
+          console.log("category price inputs")
+          console.log(`${baseUrl}/category/${categoryInput}/maxprice/${priceInput}`)
+          axios
+              .get(`${baseUrl}/category/${categoryInput}/maxprice/${priceInput}`)
+              .then((response) => {
+                const films = response.data;
+                console.log(films);
+                console.log(films.length);
+
+                films.forEach((film) => {
+                  const postHtml = `
+                      <div class="col">
+                    <div class="card shadow-sm">
+                      <img src="./images/movie.jpg" alt="" class="bd-placeholder-img card-img-top" width="100%" height="225"">
+                      <h4 class="card-header">${film.title}</h4>
+
+                      <div class="card-body">
+                        <p class="card-text">${film.description}</p>
+
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-md btn-outline-secondary my-3" id="${film.film_id}">View Details</button>
+                          </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <small class="text-muted">Category : ${film.name}</small>
+                          <small class="text-muted">Rental rate : ${film.rental_rate}</small>
+                          <small class="text-muted">Release year : ${film.release_year}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  `;
+                  $("#film").append(postHtml);
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+        }
+      }   
+      else {
+        if (filmInput !='' && categoryInput !='Category') {
+          console.log("category inputs")
+          axios
+              .get(`${baseUrl}/films/${filmInput}/category/${categoryInput}`)
+              .then((response) => {
+                const films = response.data;
+                console.log(films);
+                console.log(films.length);
+
+                films.forEach((film) => {
+                  const postHtml = `
+                      <div class="col">
+                    <div class="card shadow-sm">
+                      <img src="./images/movie.jpg" alt="" class="bd-placeholder-img card-img-top" width="100%" height="225"">
+                      <h4 class="card-header">${film.title}</h4>
+
+                      <div class="card-body">
+                        <p class="card-text">${film.description}</p>
+
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-md btn-outline-secondary my-3" id="${film.film_id}">View Details</button>
+                          </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <small class="text-muted">Category : ${film.name}</small>
+                          <small class="text-muted">Rental rate : ${film.rental_rate}</small>
+                          <small class="text-muted">Release year : ${film.release_year}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  `;
+                  $("#film").append(postHtml);
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+        }
+        // film only
+        else if (filmInput != '' && categoryInput =='Category'){
+          console.log("film inputs")
+          axios
+              .get(`${baseUrl}/films/${filmInput}`)
+              .then((response) => {
+                const films = response.data;
+                console.log(films);
+                console.log(films.length);
+
+                films.forEach((film) => {
+                  const postHtml = `
+                      <div class="col">
+                    <div class="card shadow-sm">
+                      <img src="./images/movie.jpg" alt="" class="bd-placeholder-img card-img-top" width="100%" height="225"">
+                      <h4 class="card-header">${film.title}</h4>
+
+                      <div class="card-body">
+                        <p class="card-text">${film.description}</p>
+
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-md btn-outline-secondary my-3" id="${film.film_id}">View Details</button>
+                          </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <small class="text-muted">Category : ${film.name}</small>
+                          <small class="text-muted">Rental rate : ${film.rental_rate}</small>
+                          <small class="text-muted">Release year : ${film.release_year}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  `;
+                  $("#film").append(postHtml);
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+        }
+        // category only
+        else if (filmInput == '' && categoryInput != 'Category'){
+          console.log("film price inputs")
+          axios
+              .get(`${baseUrl}/category/${categoryInput}`)
+              .then((response) => {
+                const films = response.data;
+                console.log(films);
+                console.log(films.length);
+
+                films.forEach((film) => {
+                  const postHtml = `
+                      <div class="col">
+                    <div class="card shadow-sm">
+                      <img src="./images/movie.jpg" alt="" class="bd-placeholder-img card-img-top" width="100%" height="225"">
+                      <h4 class="card-header">${film.title}</h4>
+
+                      <div class="card-body">
+                        <p class="card-text">${film.description}</p>
+
+                        <div class="btn-group">
+                          <button type="button" class="btn btn-md btn-outline-secondary my-3" id="${film.film_id}">View Details</button>
+                          </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <small class="text-muted">Category : ${film.name}</small>
+                          <small class="text-muted">Rental rate : ${film.rental_rate}</small>
+                          <small class="text-muted">Release year : ${film.release_year}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  `;
+                  $("#film").append(postHtml);
+                });
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+        }
+      } 
+
+      $(document).ready(function () {
+        $(document).on("click", "button", function () {
+          localStorage.setItem("buttonID", $(this).attr("id"));
+          window.location.assign("http://localhost:3001/details.html");
+        });
+      });
+
+      const token = localStorage.getItem("token");
+      const adminData = localStorage.getItem("userInfo")
+      console.log(token);
+      console.log(adminData)
+      if (token == null || adminData == "undefined") {
+          $(".navbar-nav").append(`
+        <li class="nav-item"><a class="nav-link active fs-5"
+        aria-current="page"
+        id="login"
+        href="#"
+        >Log in
+        </a><li>
+        `);
+        $(document).ready(function(){
+          $(document).on('click','#login',function(){
+            window.location.assign('http://localhost:3001/login.html')
+          })
+        })
+      } else {
+          $(".navbar-nav").append(`
+          <li class="nav-item"><a class="nav-link active fs-5 mx-3"
+        aria-current="page"
+        id="admin"
+        href="#"
+        >Admin
+        </a><li>
+          <li class="nav-item"><a class="nav-link active fs-5"
+        aria-current="page"
+        id="logout"
+        href="#"
+        >Logout
+        </a><li>`);
+        $(document).ready(function(){
+          $(document).on('click','#logout',function(){
+            alert("Successfully logged out.");
+            localStorage.removeItem("token");
+            window.location.assign('http://localhost:3001/main.html');
+          })
+          $(document).on('click','#admin',function(){
+            alert('Going to admin page')
+            window.location.assign('http://localhost:3001/admin.html')
+          })
+        }
+          
+        )
+      }
+
+
+      $(document).ready(() => {
+        $("#home").click(() => {
+          window.location.assign("http://localhost:3001/main.html");
+        });
+      });
+    </script>
+  </body>
+</html>
